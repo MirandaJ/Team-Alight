@@ -18,19 +18,34 @@ public class heron_movement : MonoBehaviour {
 
 	void FixedUpdate () {
 		if(Input.GetKeyDown(KeyCode.A)) {
-			Flip ();
+			if (facingRight) FlipLeft ();
+			//transform.position = Vector3=.MoveTowards(transform.position, target.position, step);
 			//anim.SetTrigger("WalkLeft");
-			Vector2 move = new Vector2 (-10f,0f);
-			rb2d.AddForce(move*speed); }
+			Vector2 m = new Vector2 (-20f,0f);
+			// rb2d.AddForce(m*speed); 
+			transform.Translate(m * Time.deltaTime);
+		}
 			
 		if (Input.GetKeyDown(KeyCode.D)) {
-			Flip ();
-			Vector2 move = new Vector2 (10f, 0f);
-			rb2d.AddForce(move*speed); }
+			if (!facingRight) FlipRight ();
+			// Vector2 m = new Vector2 (10f, 0f);
+			// rb2d.AddForce(m*speed); 
+			//transform.position = Vector3.MoveTowards(transform.position, target.position, 10*Time.deltaTime);
+			Vector2 m = new Vector2 (20f,0f);
+			// rb2d.AddForce(m*speed); 
+			transform.Translate(m * Time.deltaTime);
+		}
 	}
 
-	void Flip () {
-		facingRight = !facingRight;
+	void FlipRight () {
+		facingRight = true;
+		Vector3 theScale = transform.localScale;
+        theScale.x *= -1;
+        transform.localScale = theScale;
+	}
+
+	void FlipLeft () {
+		facingRight = false;
 		Vector3 theScale = transform.localScale;
         theScale.x *= -1;
         transform.localScale = theScale;
