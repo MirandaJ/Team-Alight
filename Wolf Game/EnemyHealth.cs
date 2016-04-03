@@ -17,6 +17,7 @@ namespace CompleteProject
         CapsuleCollider capsuleCollider;            // Reference to the capsule collider.
         bool isDead;                                // Whether the enemy is dead.
         bool isSinking;                             // Whether the enemy has started sinking through the floor.
+		float sinkWait = 0f;                             // Play fall over animation, then sink.
 
 
         void Awake ()
@@ -35,10 +36,11 @@ namespace CompleteProject
         void Update ()
         {
             // If the enemy should be sinking...
-            if(isSinking)
+			if(isSinking)
             {
+				sinkWait += Time.deltaTime;
                 // ... move the enemy down by the sinkSpeed per second.
-                transform.Translate (-Vector3.up * sinkSpeed * Time.deltaTime);
+				if(sinkWait > 3f) transform.Translate (-Vector3.up * sinkSpeed * Time.deltaTime);
             }
         }
 
@@ -85,6 +87,8 @@ namespace CompleteProject
             // Change the audio clip of the audio source to the death clip and play it (this will stop the hurt clip playing).
             enemyAudio.clip = deathClip;
             enemyAudio.Play ();
+
+			StartSinking ();
         }
 
 
@@ -103,7 +107,7 @@ namespace CompleteProject
             ScoreManager.score += scoreValue;
 
             // After 2 seconds destory the enemy.
-            Destroy (gameObject, 2f);
+            Destroy (gameObject, 3f);
         }
     }
 }

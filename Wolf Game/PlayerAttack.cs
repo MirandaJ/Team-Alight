@@ -81,7 +81,7 @@ namespace CompleteProject
 
 				if (enemyHealth != null) {
 					enemyHealth.TakeDamage (damagePerBlow, attackHit.point);
-					attackHit.transform.Translate (Vector3.back * knockBack);
+					attackHit.transform.Translate (Vector3.back * knockBack, Space.Self);
 				}
 
                 attackLine.SetPosition (1, attackHit.point);

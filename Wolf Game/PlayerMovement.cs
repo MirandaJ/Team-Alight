@@ -5,7 +5,7 @@ namespace CompleteProject
 {
     public class PlayerMovement : MonoBehaviour
     {
-        public float speed = 0.02f;         // The speed that the player will move at.
+        public float speed = 0.2f;         // The speed that the player will move at.
 
 
         Vector3 movement;                   // The vector to store the direction of the player's movement.
@@ -26,46 +26,31 @@ namespace CompleteProject
         void FixedUpdate ()
         {
             // Turn the player to face the mouse cursor and move towards me.
-            TurnAndMove ();
+            Move ();
         }
 
 
-        void TurnAndMove ()
+        void Move ()
         {
-            // Create a ray from the mouse cursor on screen in the direction of the camera.
-            Ray camRay = Camera.main.ScreenPointToRay (Input.mousePosition);
 
-            RaycastHit floorHit;
+			float h = Input.GetAxisRaw ("Horizontal");
+			float v = Input.GetAxisRaw ("Vertical");
 
-            if(Physics.Raycast (camRay, out floorHit, camRayLength, floorMask))
-            {
-                // Create a vector from the player to the point on the floor the raycast from the mouse hit.
-                Vector3 playerToMouse = floorHit.point - transform.position;
+			//transform.Rotate(Vector3.up * h * 1.6f);
+			transform.Translate (Vector3.forward * v * speed, Space.World);
+			transform.Translate (Vector3.right * h * speed, Space.World);
 
-                // Ensure the vector is entirely along the floor plane.
-                playerToMouse.y = 0f;
+			Vector3 testScale = transform.localScale;
 
-                // Create a quaternion (rotation) based on looking down the vector from the player to the mouse.
-                Quaternion newRotatation = Quaternion.LookRotation (playerToMouse);
+			if (h > 0) {
+				testScale.x = -1;
+				transform.eulerAngles = new Vector3(0, 270, 0);
+			} else if (h < 0){
+				testScale.x = 1;
+				transform.eulerAngles = new Vector3(0, 90, 0);
+			}
 
-                // Set the player's rotation to this new rotation.
-                playerRigidbody.MoveRotation (newRotatation);
-
-				float distance = Vector3.Distance (transform.position, floorHit.point);
-
-				Vector3 testScale = transform.localScale;
-				if ((floorHit.point.x < transform.position.x)  && transform.localScale.x == -1) {
-					testScale.x = 1;
-					transform.localScale = testScale;
-				} else if ((floorHit.point.x > transform.position.x) && transform.localScale.x == 1) {
-					testScale.x = -1;
-					transform.localScale = testScale;
-				}
-
-				if (distance > 5) {
-					transform.position = Vector3.MoveTowards (transform.position, floorHit.point, Vector3.Distance (transform.position, floorHit.point) * speed);
-				}
-            }
+			transform.localScale = testScale;
         }
     }
 }

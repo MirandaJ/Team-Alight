@@ -28,6 +28,16 @@ namespace CompleteProject
             {
                 // ... set the destination of the nav mesh agent to the player.
                 nav.SetDestination (player.position);
+				Vector3 testScale = transform.localScale;
+
+				if (player.position.x < transform.position.x) {
+					testScale.z = -1;
+					transform.localEulerAngles = new Vector3(0, 270, 0);
+				} else if (player.position.x > transform.position.x){
+					testScale.z = 1;
+					transform.localEulerAngles = new Vector3(0, 90, 0);
+				}
+				transform.localScale = testScale;
             }
             // Otherwise...
             else
